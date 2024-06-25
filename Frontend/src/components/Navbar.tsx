@@ -7,7 +7,7 @@ const Navbar = () => {
             <div className="container mx-auto flex flex-row justify-between items-center">
         <NavLink to="/">
             <img src={Logo} alt="" className="w-48 " /></NavLink>
-       <NavLink to="/loginPage/signIn" className="flex items-center">
+       <NavLink to="/login" className="flex items-center">
   <div className="flex items-center">
              <FaUserCircle />  <p className="ml-1 hover:underline cursor-pointer">Sign In</p>
          </div>

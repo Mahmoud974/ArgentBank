@@ -1,0 +1,243 @@
+swagger: "2.0"
+info:
+  title: API Argent bank MOUSSA
+  description: API for managing user transactions and accounts
+  version: 2.1.0
+  termsOfService: http://mybank.io/terms/
+host: localhost:3001
+basePath: /v1
+schemes:
+  - https
+  - http
+paths:
+  /transactions:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Transactions
+      summary: Retrieve Monthly Transactions
+      description: Get a list of all transactions for the current month.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Provide Bearer JWT token
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transactions successfully retrieved
+          schema:
+            $ref: "#/definitions/TransactionsResponse"
+        "400":
+          description: Invalid request parameters
+        "401":
+          description: Authentication failed
+        "404":
+          description: No transactions found
+        "500":
+          description: Server error
+  /transaction:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - Transactions
+      summary: Add a New Transaction
+      description: Create a new transaction record.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Provide Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: transaction
+          description: Details of the new transaction
+          required: true
+          schema:
+            $ref: "#/definitions/NewTransaction"
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Transaction created successfully
+          schema:
+            $ref: "#/definitions/TransactionResponse"
+        "400":
+          description: Invalid input data
+        "401":
+          description: Authentication failed
+        "500":
+          description: Server error
+  /transaction/{transactionId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Transactions
+      summary: Get Transaction Details
+      description: Fetch details of a specific transaction by its ID.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Provide Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          description: ID of the transaction to retrieve
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction details retrieved successfully
+          schema:
+            $ref: "#/definitions/TransactionResponse"
+        "400":
+          description: Invalid transaction ID
+        "401":
+          description: Authentication failed
+        "404":
+          description: Transaction not found
+        "500":
+          description: Server error
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - Transactions
+      summary: Update a Transaction
+      description: Edit an existing transaction's details.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Provide Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          description: ID of the transaction to update
+          required: true
+          type: string
+        - in: body
+          name: transaction
+          description: Updated transaction details
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTransaction"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction updated successfully
+          schema:
+            $ref: "#/definitions/TransactionResponse"
+        "400":
+          description: Invalid input data
+        "401":
+          description: Authentication failed
+        "404":
+          description: Transaction not found
+        "500":
+          description: Server error
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - Transactions
+      summary: Delete a Transaction
+      description: Remove a transaction from the records.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Provide Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          description: ID of the transaction to delete
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction deleted successfully
+        "400":
+          description: Invalid transaction ID
+        "401":
+          description: Authentication failed
+        "404":
+          description: Transaction not found
+        "500":
+          description: Server error
+securityDefinitions:
+  BearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  TransactionsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/Transaction"
+  TransactionResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      data:
+        $ref: "#/definitions/Transaction"
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      date:
+        type: string
+      amount:
+        type: number
+      description:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+  NewTransaction:
+    type: object
+    properties:
+      accountId:
+        type: string
+      amount:
+        type: number
+      description:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+  UpdateTransaction:
+    type: object
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string

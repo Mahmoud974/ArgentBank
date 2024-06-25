@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { userStatus } from '../datatypes';
 
-// Define the initial state
+
 const initialState: userStatus = {
   isLogged: false,
   token: ""
 }
 export const loginSlice = createSlice({
   name: "login",
-  // `createSlice` will infer the state type from the `initialState` argument
+
   initialState,
   reducers: {
     userLogin: (state, action: PayloadAction<string>) => {
