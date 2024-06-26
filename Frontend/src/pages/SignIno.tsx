@@ -11,6 +11,8 @@ const SignIn = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // État de connexion
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -18,17 +20,24 @@ const SignIn = () => {
     event.preventDefault();
     try {
       const responseData = await handleSignIn(email, password);
-      dispatch(setUser({ email, token: responseData.token })); // Assurez-vous que 'token' est la clé correcte dans votre réponse
+      dispatch(setUser({ email, token: responseData.token }));
+      setIsLoggedIn(true); // Mettre à jour l'état de connexion
       navigate('/connexion');
     } catch (error) {
       console.error('Erreur de connexion:', (error as Error).message);
       setErrorMessage((error as Error).message);
     }
   };
+  const handleLogout = () => {
+    // Mettre à jour l'état de connexion à false lors de la déconnexion
+    setIsLoggedIn(false);
+    // Rediriger l'utilisateur vers la page d'accueil
+    navigate('/');
+  };
 
   return (
     <div>
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />  
       <div className="bg-[#12022B] min-h-screen flex items-start justify-center pt-12">
         <div className="bg-white py-8 rounded shadow-md px-12">
           <FaUserCircle className="mx-auto my-4" size={50} />
